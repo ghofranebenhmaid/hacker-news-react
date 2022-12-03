@@ -25,11 +25,10 @@ export const fetchStory = async (id) => {
 export const fetchAuthor = async (id) => {
   const response = await fetch(`${baseUrl}/user/${id}.json`);
   const authorData = await response.json();
-  //   console.log(storyData);
+  // console.log(authorData);
 
   const author = {
     id: authorData.id,
-    about: authorData.about,
     karma: authorData.karma,
   };
   return author;
@@ -37,6 +36,16 @@ export const fetchAuthor = async (id) => {
 
 export const fetchStories = async (ids) => {
   const stories = await Promise.all(ids.map(fetchStory));
-
   return stories;
+};
+export const fetchAuthors = async (ids) => {
+  const authors = await Promise.all(ids.map(fetchAuthor));
+  return authors;
+};
+
+export const getRandom = (arr, count) => {
+  let _arr = [...arr];
+  return [...Array(count)].map(
+    () => _arr.splice(Math.floor(Math.random() * _arr.length), 1)[0]
+  );
 };
