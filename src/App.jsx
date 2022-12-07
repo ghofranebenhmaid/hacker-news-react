@@ -1,18 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import StoryList from "./components/stories/StoryList";
 
-import {
-  getRandom,
-  fetchAuthors,
-  fetchStories,
-  fetchTopStoriesIds,
-} from "./utils";
-import AuthorPage from "./pages/AuthorPage";
+import { getRandom, fetchStories, fetchTopStoriesIds } from "./utils";
 
 function App() {
   const [stories, setStories] = useState([]);
-  const [name, setName] = useState([]);
   const [topStoriesIds, setTopStoriesIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,11 +17,6 @@ function App() {
 
     const sorted = randomStory.sort((a, b) => +a.score - +b.score);
 
-    const authors = sorted.map((item) => item.by);
-    const by = await fetchAuthors(authors);
-
-    setName(by);
-    // console.log(name);
     setStories(sorted);
     setLoading(false);
   }, []);
@@ -38,10 +25,35 @@ function App() {
     loadStories();
   }, [loadStories]);
 
+  // useEffect(() => {
+  //   const fetchStories = async () => {
+  //     const response = await fetch(
+  //       "https://hacker-news.firebaseio.com/v0/topstories.json"
+  //     );
+  //     const storyIds = await response.json();
+  //     const randomStoryIds = storyIds
+  //       .sort(() => 0.5 - Math.random())
+  //       .slice(0, 10);
+
+  //     const promises = randomStoryIds.map((id) =>
+  //       fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`)
+  //     );
+
+  //     const results = await Promise.all(promises);
+  //     const stories = await Promise.all(results.map((res) => res.json()));
+  //     console.log(stories);
+  //     setStories(stories);
+  //   };
+
+  //   fetchStories();
+  // }, []);
+
   return (
     <main className="App">
       {loading && <p className="center">Loading...</p>}
       {!loading && <StoryList stories={stories} />}
+
+      {/* <StoryList stories={stories} /> */}
     </main>
   );
 }

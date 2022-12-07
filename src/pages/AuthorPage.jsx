@@ -13,7 +13,7 @@ const AuthorPage = (props) => {
   const params = useParams();
 
   const [stories, setStories] = useState([]);
-  const [name, setName] = useState([]);
+  const [authorInfo, setAuthorInfo] = useState([]);
   const [topStoriesIds, setTopStoriesIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,14 +22,11 @@ const AuthorPage = (props) => {
     const topStoriesIdsData = await fetchTopStoriesIds();
     setTopStoriesIds(topStoriesIdsData);
     const storiesData = await fetchStories(topStoriesIdsData);
-    // const randomStory = getRandom(storiesData, 10);
-
-    // const sorted = randomStory.sort((a, b) => +a.score - +b.score);
 
     const authors = storiesData.map((item) => item.by);
-    const by = await fetchAuthors(authors);
-    console.log(by);
-    setName(by);
+    const author = await fetchAuthors(authors);
+
+    setAuthorInfo(author);
     setStories(storiesData);
     setLoading(false);
   }, []);
@@ -38,7 +35,7 @@ const AuthorPage = (props) => {
     loadStories();
   }, [loadStories]);
 
-  const author = name.find((author) => author.id === params.id);
+  const author = authorInfo.find((author) => author.id === params.id);
 
   //   if (!author) {
   //     return <p>no data!</p>;
